@@ -161,17 +161,35 @@ h1{
 .context .texto {
   flex: 1;              /* El texto ocupa el resto */
   color: white;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.6;
 }
 .context .texto ol {
   padding-left: 20px; /* sangría para los números */
+  
 }
 
 .context .texto li {
   margin-bottom: 8px; /* espacio entre ítems */
+   list-style-type: decimal;
+   
+}
+.img-box {
+  flex: 0 0 120px;        
+  display: flex;
+  justify-content: center; /* manda la imagen a la derecha */
+  align-items: center;
+  
+
 }
 
+.img-box .imagen {
+  width: 100%;           /* la imagen ocupa todo el ancho del div */
+  height: auto;          /* mantiene proporción */
+  object-fit: contain;   /* no se deforma */
+  border-radius: 6px;
+  display: block;
+}
 
 /*FOOTER*/
 .pie{
