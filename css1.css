@@ -111,6 +111,43 @@ color: #000000;
         max-width: 100%;
       }
     }
+
+/* ENLACE CONTACTO (centrado y blanco) */
+.enlace-contacto {
+  display: block;              /* permite centrarlo fácilmente */
+  text-align: center;
+  color: white;
+  font-size: 2rem;             /* letras más grandes */
+  font-weight: 600;
+  text-decoration: none;       /* quita el subrayado */
+  margin: 100px auto;           /* espacio arriba y abajo */
+  transition: color 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.enlace-contacto:hover {
+  /*color: #ffd6e0;   */
+  color: #240b36;           /* un blanco rosado suave al pasar el mouse */
+}
+
+/* 📱 Responsivo */
+@media (max-width: 768px) {
+  .enlace-contacto {
+    font-size: 1.6rem;
+    margin: 50px auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .enlace-contacto {
+    font-size: 2.1rem;
+    margin: 80px auto;
+  }
+}
+
+
+
+
 /*FOOTER*/
 .pie{
  
