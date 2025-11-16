@@ -32,6 +32,26 @@ body {
   box-shadow: none;
 }
 
+
+/* Número de teléfono */
+.telefono {
+  color: #ffffff;
+  font-size: 22px;         /* Tamaño medio */
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Responsivo del teléfono */
+@media (max-width: 600px) {
+  .telefono {
+    font-size: 18px;
+  }
+}
+
+
+
+
 /* Imagen */
 .contenedor img {
   width: 460px;
@@ -48,6 +68,8 @@ body {
 .contenedor img:hover {
   transform: scale(1.05);
 }
+
+
 
 /* Botón */
 .boton-volver {
