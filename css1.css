@@ -124,6 +124,33 @@ color: #000000;
 }
 
 
+/* Imagen de WhatsApp responsiva */
+.img-whats {
+  display: block;
+  width: 250px;
+  max-width: 40%;
+  margin: 20px auto;
+  border-radius: 15px;
+  transition: transform 0.25s ease;
+}
+
+.img-whats:hover {
+  transform: scale(1.1);
+}
+/* Responsivo para pantallas muy chicas */
+@media (max-width: 480px) {
+  .img-whats {
+    width: 160px;
+    max-width: 60%;
+  }
+}
+
+
+
+
+
+
+/*------------------------------------------------------------------*/
 /* ENLACE CONTACTO (más llamativo) */
 .enlace-contacto {
   display: block;
@@ -172,7 +199,7 @@ color: #000000;
     margin-bottom: 80px;
   }
 }
-
+/*------------------------------------------------------------------*/
 
 
 
