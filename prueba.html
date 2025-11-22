@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Galería emergente responsiva</title>
+  <style>
+    :root{
+      --gap: 12px;
+      --thumb-height: 180px;
+      --overlay-bg: rgba(0,0,0,0.85);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0; padding:18px; background:#0f172a; color:#e6eef8;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+
+    h1{margin:0 0 18px 0; font-size:20px}
+
+    /* Grid de miniaturas responsive */
+    .galeria{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap:var(--gap);
+      align-items:stretch;
+    }
+
+    .galeria img{
+      width:100%;
+      height:var(--thumb-height);
+      object-fit:cover;
+      display:block;
+      border-radius:10px;
+      cursor:pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+      box-shadow: 0 4px 12px rgba(2,6,23,0.6);
+    }
+    .galeria img:hover{ transform: translateY(-6px) scale(1.02); box-shadow:0 12px 28px rgba(2,6,23,0.7)}
+
+    /* Modal / Lightbox */
+    .lightbox{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:var(--overlay-bg); z-index:9999; padding:24px;
+    }
+    .lightbox.open{ display:flex }
+
+    .viewer{
+      max-width:1200px; width:100%; max-height:92vh; position:relative; display:flex; gap:12px; align-items:center; justify-content:center;
+    }
+
+    .viewer img{
+      max-width:100%; max-height:92vh; height:auto; width:auto; border-radius:8px; box-shadow:0 10px 40px rgba(0,0,0,0.6);
+      transition: transform .25s cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* Controles */
+    .btn{
+      background:none; border:0; color:inherit; padding:10px; cursor:pointer; font-size:18px; line-height:1; border-radius:8px;
+      user-select:none;
+    }
+    .btn:focus{ outline:2px solid rgba(255,255,255,0.12) }
+
+    .control-left, .control-right{
+      position:absolute; top:50%; transform:translateY(-50%); display:flex; align-items:center; justify-content:center;
+      width:56px; height:56px; background:rgba(255,255,255,0.04); backdrop-filter: blur(4px);
+    }
+    .control-left{ left:12px }
+    .control-right{ right:12px }
+
+    .close{
+      position:absolute; top:12px; right:12px; width:44px; height:44px; display:grid; place-items:center; background:rgba(255,255,255,0.04);
+    }
+
+    .caption{
+      margin-top:12px; font-size:14px; text-align:center; opacity:0.95;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width:600px){
+      :root{--thumb-height:120px}
+      .control-left, .control-right{ width:44px; height:44px }
+      .viewer{ padding:6px }
+    }
+  </style>
+</head>
+<body>
+  <h1>Galería emergente responsiva</h1>
+
+  <!-- Contenedor con las miniaturas (usa exactamente tus imágenes) -->
+  <div class="galeria" id="galeria">
+    <img src="./img/Personalizado 1.jfif" alt="Personalizado 1">
+    <img src="./img/Personalizado 2.jfif" alt="Personalizado 2">
+    <img src="./img/Personalizado 3.jfif" alt="Personalizado 3">
+  </div>
+
+  <!-- Lightbox (inicialmente oculto) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
+    <div class="viewer" id="viewer">
+      <button class="btn control-left" id="prev" aria-label="Anterior">◀</button>
+
+      <img id="lightbox-img" src="" alt="">
+
+      <button class="btn control-right" id="next" aria-label="Siguiente">▶</button>
+
+      <button class="btn close" id="close" aria-label="Cerrar">✕</button>
+
+      <div style="position:absolute; left:0; right:0; bottom:-56px;">
+        <p class="caption" id="caption"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const gallery = Array.from(document.querySelectorAll('#galeria img'));
+      const lightbox = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      const caption = document.getElementById('caption');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const closeBtn = document.getElementById('close');
+
+      let current = 0;
+
+      function open(index){
+        current = index;
+        const img = gallery[current];
+        lbImg.src = img.src;
+        lbImg.alt = img.alt || '';
+        caption.textContent = img.alt || '';
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden','false');
+        document.body.style.overflow = 'hidden';
+        // focus for keyboard
+        closeBtn.focus();
+      }
+
+      function close(){
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden','true');
+        lbImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      function showNext(n){
+        current = (current + n + gallery.length) % gallery.length;
+        const img = gallery[current];
+        // pequeño efecto
+        lbImg.style.transform = 'scale(.98)';
+        setTimeout(()=>{
+          lbImg.src = img.src;
+          lbImg.alt = img.alt || '';
+          caption.textContent = img.alt || '';
+          lbImg.style.transform = 'scale(1)';
+        },120);
+      }
+
+      // abrir al clicar miniatura
+      gallery.forEach((thumb, i)=>{
+        thumb.addEventListener('click', ()=> open(i));
+        thumb.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') open(i); });
+        thumb.tabIndex = 0; // que sean focusables
+      });
+
+      // controles
+      prevBtn.addEventListener('click', ()=> showNext(-1));
+      nextBtn.addEventListener('click', ()=> showNext(1));
+      closeBtn.addEventListener('click', close);
+
+      // cerrar al clicar fuera de la imagen
+      lightbox.addEventListener('click', (e)=>{
+        if(e.target === lightbox) close();
+      });
+
+      // teclado
+      document.addEventListener('keydown', (e)=>{
+        if(lightbox.classList.contains('open')){
+          if(e.key === 'Escape') close();
+          if(e.key === 'ArrowRight') showNext(1);
+          if(e.key === 'ArrowLeft') showNext(-1);
+        }
+      });
+
+      // swipe simple para móviles
+      let startX = 0;
+      lbImg.addEventListener('touchstart', (e)=>{ startX = e.changedTouches[0].clientX; });
+      lbImg.addEventListener('touchend', (e)=>{
+        const dx = e.changedTouches[0].clientX - startX;
+        if(Math.abs(dx) > 40){
+          if(dx < 0) showNext(1); else showNext(-1);
+        }
+      });
+
+      // pre-carga ligera de la siguiente imagen
+      function preload(index){
+        const i = new Image(); i.src = gallery[index].src;
+      }
+      // actualizar la precarga cada vez que se muestre siguiente
+      const origShowNext = showNext;
+      showNext = (n)=>{ origShowNext(n); preload((current + 1) % gallery.length); };
+
+    })();
+  </script>
+</body>
+</html>

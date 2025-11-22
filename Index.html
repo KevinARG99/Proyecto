@@ -48,6 +48,44 @@
 <!--<a href="./Contactos.html" class="enlace-contacto">Contactos</a>-->
 
 
+<h1 class="titulo-galeria">Trabajos personalizados</h1>
+
+<div class="galeria">
+  <img src="./img/Personalizado 1.jfif" alt="Personalizado 1">
+  <img src="./img/Personalizado 2.jfif" alt="Personalizado 2">
+  <img src="./img/Personalizado 3.jfif" alt="Personalizado 3">
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox">
+  <span class="cerrar">&times;</span>
+  <img class="lightbox-img" id="imgGrande">
+</div>
+
+<script>
+  const galeria = document.querySelectorAll('.galeria img');
+  const lightbox = document.getElementById('lightbox');
+  const imgGrande = document.getElementById('imgGrande');
+  const cerrar = document.querySelector('.cerrar');
+
+  galeria.forEach(img => {
+    img.addEventListener('click', () => {
+      lightbox.style.display = 'block';
+      imgGrande.src = img.src;
+    });
+  });
+
+  cerrar.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+  });
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target !== imgGrande) {
+      lightbox.style.display = 'none';
+    }
+  });
+</script>
+
 
 
 <footer class="pie">
